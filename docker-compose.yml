@@ -1,6 +1,6 @@
 services:
   node:
-    image: node:20-alpine
+    build: .
     container_name: nexus
     working_dir: /usr/src/app
     volumes:
@@ -8,3 +8,16 @@ services:
     ports:
       - "8000:8000"
     command: yarn start:dev
+    
+  mongodb_container:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+volumes:
+  mongodb_data_container:
