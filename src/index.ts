@@ -19,7 +19,7 @@ const main = async () => {
 
         const response = await getUsersController.handle()
 
-        res.send(response.body).status(response.statusCode)
+        res.status(response.statusCode).send(response.body)
     })
 
     app.listen(port, () => console.log(`listening on port ${port}!`))
