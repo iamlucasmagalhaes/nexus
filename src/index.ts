@@ -5,6 +5,8 @@ import { MongoGetUsersRepository } from "./repositories/get-users/mongo-get-user
 import { MongoClient } from "./database/mongo.js"
 import { MongoCreateUsersRepository } from "./repositories/create-users/mongo-create-users.js"
 import { CreateUserController } from "./controllers/create-user/create-user.js"
+import { UpdateUserController } from "./controllers/update-users/update-users.js"
+import { MongoUpdateUserRepository } from "./repositories/update-users/mongo-update-users.js"
 
 const main = async () => {
     config()
@@ -38,6 +40,19 @@ const main = async () => {
     })
 
     app.listen(port, () => console.log(`listening on port ${port}!`))
+
+    app.patch("/users/:id", async (req, res) => {
+        const mongoUpdateUserRepository = new MongoUpdateUserRepository()
+
+        const updateUserController = new UpdateUserController(mongoUpdateUserRepository)
+
+        const response = await updateUserController.handle({
+            body: req.body,
+            params: req.params
+        })
+
+        res.status(response.statusCode).send(response.body)
+    })
 }
 
 main()

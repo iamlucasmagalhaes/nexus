@@ -3,7 +3,7 @@ import type { IUpdateUserRepository, UpdateUserParams } from "../../controllers/
 import { MongoClient } from "../../database/mongo.js";
 import type { User } from "../../models/user.js";
 
-export class updateUserRepository implements IUpdateUserRepository{
+export class MongoUpdateUserRepository implements IUpdateUserRepository{
     async updateUser(id: string, params: UpdateUserParams): Promise<User> {
         await MongoClient.db.collection("users").updateOne({_id: new ObjectId(id)}, {
             $set: {
@@ -19,7 +19,7 @@ export class updateUserRepository implements IUpdateUserRepository{
             throw new Error("User not update")
         }
 
-        const {_id, ...res} = user
+        const {_id, ...rest} = user
         
         return {id: _id.toHexString(), ...rest}
     }
